@@ -50,7 +50,7 @@ import { renderErSvg } from './er/renderer.ts'
  * Returns the type keyword used for routing to the correct pipeline.
  */
 function detectDiagramType(text: string): 'flowchart' | 'sequence' | 'class' | 'er' {
-  const firstLine = text.trim().split('\n')[0]?.trim().toLowerCase() ?? ''
+  const firstLine = text.trim().split(/[\n;]/)[0]?.trim().toLowerCase() ?? ''
 
   if (/^sequencediagram\s*$/.test(firstLine)) return 'sequence'
   if (/^classdiagram\s*$/.test(firstLine)) return 'class'
@@ -119,7 +119,7 @@ export async function renderMermaid(
   const diagramType = detectDiagramType(text)
 
   // Preprocess: strip leading/trailing whitespace, filter comments
-  const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0 && !l.startsWith('%%'))
+  const lines = text.split(/[\n;]/).map(l => l.trim()).filter(l => l.length > 0 && !l.startsWith('%%'))
 
   switch (diagramType) {
     case 'sequence': {
